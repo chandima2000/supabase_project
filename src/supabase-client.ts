@@ -1,14 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
+import { Database } from '../database.types';
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
-
-if (supabaseUrl || supabaseKey) {
-    throw new Error("Missing Supabase environmental variable")
-}
-
-export const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!
-) 
+export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
