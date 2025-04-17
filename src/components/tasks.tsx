@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabase-client";
+import { Session } from "@supabase/supabase-js";
 
-export default function Tasks() {
+export default function Tasks({session} : {session: Session}) {
 
   interface Task {
     id: number;
@@ -22,7 +23,7 @@ export default function Tasks() {
     
     const { error } = await supabase
                 .from('tasks')   
-                .insert(newTask)
+                .insert({...newTask, email: session.user.email})
                 .single();
 
     if (error){
