@@ -92,6 +92,24 @@ export default function Tasks({session} : {session: Session}) {
     },[])
 
 
+    //Supabase Subscriptions (Realtime Updates)
+    useEffect(() => {
+        const channel = supabase.channel("tasks-channel");
+        channel
+          .on(
+            "postgres_changes",
+            { event: "INSERT", schema: "public", table: "tasks" },
+            (payload) => {
+              const newTask = payload.new as Task;
+              setTasks((prev) => [...prev, newTask]);
+            }
+          )
+          .subscribe((status) => {
+            console.log("Subscription: ", status);
+          });
+    }, []);
+
+
     
   return (
     <div className="max-w-xl mx-auto p-4">
